@@ -1,6 +1,8 @@
 from unicorn import *
 from unicorn.x86_const import *
 """
+    Only code
+
     (rax starts at 5)
 
     add rax, 4  - rax: 9

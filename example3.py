@@ -3,17 +3,18 @@ from unicorn.x86_const import *
 import struct
 
 """
+    Code + Stack + Data
 
-(Typical function prologue)
-(making room on the stack by subtracting 0x10)
-(moving 0x300000 onto the stack)
-(getting the value at address 0x300000)
+    (Typical function prologue)
+    (making room on the stack by subtracting 0x10)
+    (moving 0x300000 onto the stack)
+    (getting the value at address 0x300000)
 
-push ebp
-mov ebp, esp
-sub esp, 0x10
-mov DWORD PTR [ebp-0x4], 0x300000
-mov eax, DWORD PTR [ebp-0x4]
+    push ebp
+    mov ebp, esp
+    sub esp, 0x10
+    mov DWORD PTR [ebp-0x4], 0x300000
+    mov eax, DWORD PTR [ebp-0x4]
 """
 CODE = "\x55\x89\xE5\x83\xEC\x10\xC7\x45\xFC\x00\x00\x30\x00\x8B\x45\xFC"
 

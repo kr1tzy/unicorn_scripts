@@ -1,6 +1,8 @@
 from unicorn import *
 from unicorn.x86_const import *
 """
+    Code + Stack
+
     (rax starts with 0x1)
     (rbx starts with 0x2)
     (rcx starts with 0x3)
