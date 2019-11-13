@@ -6,18 +6,19 @@ import struct
     Code + Stack + Data
 
     (Typical function prologue)
-    (making room on the stack by subtracting 0x10)
+    (making room on the stack for local by subtracting 0x4)
     (moving 0x300000 onto the stack)
-    (getting the value at address 0x300000)
+    (getting the value at address 0x300000 in rax)
+    (put the value sitting at the data address 0x300000 into rax)
 
-    push ebp
-    mov ebp, esp
-    sub esp, 0x10
-    mov DWORD PTR [ebp-0x4], 0x300000
-    mov eax, DWORD PTR [ebp-0x4]
+    push   rbp
+    mov    rbp,rsp
+    sub    rsp,0x4
+    mov    DWORD PTR [rbp-0x4],0x300000
+    mov    rax,QWORD PTR [rbp-0x4]
+    mov    rax,QWORD PTR [rax]
 """
-CODE = "\x55\x89\xE5\x83\xEC\x10\xC7\x45\xFC\x00\x00\x30\x00\x8B\x45\xFC"
-
+CODE = "\x55\x48\x89\xE5\x48\x83\xEC\x04\xC7\x45\xFC\x00\x00\x30\x00\x48\x8B\x45\xFC\x48\x8B\x00"
 
 BASE_ADDR  = 0x00400000
 DATA_ADDR  = 0x00300000
@@ -34,7 +35,7 @@ def u32(data):
 
 def main():
     try:
-        mu = Uc(UC_ARCH_X86, UC_MODE_32)
+        mu = Uc(UC_ARCH_X86, UC_MODE_64)
 
         # Maps out memory regions
         mu.mem_map(BASE_ADDR, BASE_SIZE)
@@ -53,21 +54,22 @@ def main():
 
 
         # Grabs resulting registers and data
-        esp = mu.reg_read(UC_X86_REG_ESP)
-        ebp = mu.reg_read(UC_X86_REG_EBP)
-        eax = mu.reg_read(UC_X86_REG_EAX)
+        rsp = mu.reg_read(UC_X86_REG_RSP)
+        rbp = mu.reg_read(UC_X86_REG_RBP)
+        rax = mu.reg_read(UC_X86_REG_RAX)
         data = mu.mem_read(DATA_ADDR, 0x20)
 
 
         # Local variable from [ebp - 0x4]
-        ebp_4 = mu.mem_read(ebp - 4, 0x4)
+        rbp_4 = mu.mem_read(rbp - 4, 0x4)
 
         print("Result")
-        print(" - esp: " + str(hex(esp)).rstrip("L"))
-        print(" - ebp: " + str(hex(ebp)).rstrip("L"))
-        print(" - eax: " + str(hex(eax)).rstrip("L"))
+        print(" - rsp: " + str(hex(rsp)).rstrip("L"))
+        print(" - rbp: " + str(hex(rbp)).rstrip("L"))
+        print(" - rax: " + str(hex(rax)).rstrip("L"))
+        print("\t - as string: " + str(hex(rax).lstrip("0x").rstrip("L").decode("hex")))
         print(" - data: " + data)
-        print(" - [ebp-0x4]: " + str(hex(u32(ebp_4))))
+        print(" - [rbp-0x4]: " + str(hex(u32(rbp_4))))
     except Exception as e:
         print("Err: %s" % e)
 

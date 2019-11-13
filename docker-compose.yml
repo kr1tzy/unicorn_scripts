@@ -1,0 +1,20 @@
+version: "3"
+services:
+    unicorn_scripts: 
+        build: .
+        cap_add:
+            - SYS_PTRACE
+        container_name: unicorn_scripts
+        entrypoint: /bin/bash
+        environment:
+            - discovery.type=single-node
+        security_opt:
+            - seccomp:unconfined
+            - apparmor:unconfined
+        ports:
+            - 9300:9300
+        privileged: true
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./scripts/:/scripts/
