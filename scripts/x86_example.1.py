@@ -1,5 +1,3 @@
-from unicorn import *
-from unicorn.x86_const import *
 """
     Only code
 
@@ -11,10 +9,14 @@ from unicorn.x86_const import *
     sub rax, 2  - rax: 10
 """
 
-CODE = "\x48\x83\xC0\x04\x48\x83\xE8\x02\x48\x83\xC0\x05\x48\x83\xE8\x02"
+from unicorn import *
+from unicorn.x86_const import *
+
+CODE = b"\x48\x83\xC0\x04\x48\x83\xE8\x02\x48\x83\xC0\x05\x48\x83\xE8\x02"
 BASE = 0x004000000
 
 try:
+    print("-" * 32)
     print("Emulating x86_64")
     
     # Unicorn engine
@@ -32,9 +34,11 @@ try:
     # Emulate the binary
     mu.emu_start(BASE, BASE+len(CODE))
 
-    print("Done")
-
+    # Read registers
     r_rax = mu.reg_read(UC_X86_REG_RAX)
-    print("Rax: " + str(r_rax))
+
+    print("-" * 32)
+    print("Result")
+    print(f" - rax: {r_rax}")
 except Exception as e:
-    print("Err: %s" % e)
+    print(f"err: {e}")

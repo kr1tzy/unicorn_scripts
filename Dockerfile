@@ -1,4 +1,3 @@
-# Cyber Academy Reverse Engineering Course Dockerfile
 # Run these commands to get started:
 #   docker-compose build
 #   docker-compose up -d
