@@ -1,12 +1,17 @@
 """
     Only code
+        - no stack
+        - no data
 
-    (rax starts at 5)
+    rax starts with 5
 
-    add rax, 4  - rax: 9
-    sub rax, 2  - rax: 7
-    add rax, 5  - rax: 12
-    sub rax, 2  - rax: 10
+
+    ```
+        add rax, 4      =>  rax: 9
+        sub rax, 2      =>  rax: 7
+        add rax, 5      =>  rax: 12
+        sub rax, 2      =>  rax: 10
+    ```
 """
 
 from unicorn import *
@@ -18,6 +23,8 @@ BASE = 0x004000000
 try:
     print("-" * 32)
     print("Emulating x86_64")
+    print(" - no stack")
+    print(" - no data")
     
     # Unicorn engine
     mu = Uc(UC_ARCH_X86, UC_MODE_64)

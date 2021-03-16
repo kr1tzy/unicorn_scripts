@@ -1,13 +1,16 @@
 """
     Code + Stack
 
-    (rax starts with 0x1)
-    (rbx starts with 0x2)
-    (rcx starts with 0x3)
+    rax starts with 0x1 (set on line 41)
+    rbx starts with 0x2 (set on line 42)
+    rcx starts with 0x3 (set on line 43)
 
-    push rcx        [push rcx onto the stack]
-    pop rax         rax: 0x3
-    add rax, rbx    rax: 0x5
+
+    ```
+        push rcx        [push rcx onto the stack]
+        pop rax         rax: 0x3
+        add rax, rbx    rax: 0x5
+    ```
 """
 
 from unicorn import *
@@ -22,6 +25,8 @@ STACK_SIZE = 1024*1024
 try:
     print("-" * 32)
     print("Emulating x86_64")
+    print(" - yes stack")
+    print(" - no data")
     mu = Uc(UC_ARCH_X86, UC_MODE_64)
 
     # Map out memory
